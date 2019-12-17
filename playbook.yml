@@ -1,0 +1,10 @@
+---
+  - hosts: 
+      - database
+    roles:
+      - mysql
+
+  - hosts: 
+      - web
+    roles:
+      - wordpress

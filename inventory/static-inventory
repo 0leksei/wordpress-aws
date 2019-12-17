@@ -1,0 +1,12 @@
+[tag_Role_Web]
+[tag_Role_Bastion]
+[tag_Role_Database]
+
+[web:children]
+tag_Role_Web
+
+[bastion:children]
+tag_Role_Bastion
+
+[database:children]
+tag_Role_Database

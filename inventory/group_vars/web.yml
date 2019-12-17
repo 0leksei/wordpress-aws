@@ -1,0 +1,12 @@
+# Ansible bastion configuration
+ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q ubuntu@{{ bastion }}"'
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+
+# Bastion host variable
+bastion: "{{ lookup('env','bastion_ip') }}"
+
+# Wordpress MySQL details
+db_private_ip: "{{ lookup('env','db_private_ip') }}"
+wp_mysql_db: "wordpress"
+wp_mysql_user: "wordpress"
+wp_mysql_password: "{{ lookup('env','wp_mysql_password') }}"

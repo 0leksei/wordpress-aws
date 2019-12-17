@@ -1,0 +1,41 @@
+---
+# tasks file for mysql
+  - name: Set MySQL root password
+    command: mysql -u root --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '"{{ mysql_root_password }}"';"
+    become: yes
+    ignore_errors: yes
+    no_log: true
+  
+  - name: Grant MySQL root remote access
+    command: mysql -u root -p"{{ mysql_root_password }}" --execute="CREATE USER 'root'@'%' IDENTIFIED BY '"{{ mysql_root_password }}"'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'; FLUSH PRIVILEGES;"
+    become: yes
+    ignore_errors: yes
+
+  - name: Change MySQL bind address to allow remote access
+    replace:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '^bind-address(.)+'
+      replace: '#bind-address=0.0.0.0'
+
+  - name: Restart MySQL
+    service:
+      name: mysql
+      state: restarted
+
+  - name: Create Wordpress database
+    mysql_db: 
+      db: "{{ wp_mysql_db }}"
+      state: present
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      login_host: "{{ db_private_ip }}"
+
+  - name: Create Wordpress DB user
+    mysql_user: 
+      name: "{{ wp_mysql_user }}" 
+      password: "{{ wp_mysql_password }}"
+      priv: '*.*:ALL'
+      host: "%"
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+    delegate_to: "{{ db_private_ip }}"
