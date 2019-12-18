@@ -124,8 +124,8 @@ Make sure you have pre-requisites and AWS authentication setup as mentioned abov
 Clone the solution repository and go into its directory:
 
 ```
-git clone git@github.com:0leksei/demotask-wordpress.git
-cd demotask-wordpress
+git clone git@github.com:0leksei/wordpress-aws.git
+cd wordpress-aws
 ```
 
 ### Run installation
